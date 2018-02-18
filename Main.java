@@ -29,27 +29,30 @@ public class Main {
                     removeBranch();
                     break;
                 case 3:
-                    printBranches();
+                    updateBranch();
                     break;
                 case 4:
-                    addNewCustomer();
+                    printBranches();
                     break;
                 case 5:
-                    removeCustomer();
+                    addNewCustomer();
                     break;
                 case 6:
-                    updateCustomer();
+                    removeCustomer();
                     break;
                 case 7:
-                    queryCustomer();
+                    updateCustomer();
                     break;
                 case 8:
+                    queryCustomer();
+                    break;
+                case 9:
                     printCustomers();
                     break;
-                //case 9;
                 //case 10;
                 //case 11;
-                case 12:
+                //case 12;
+                case 13:
                     flag = false;
                     break;
                 default:
@@ -68,19 +71,20 @@ public class Main {
                 "\n\n    *** Branch service ***\n" +
                 "\n    1. Add a new branch" +
                 "\n    2. Remove a branch" +
-                "\n    3. Print available branches" +
+                "\n    3. Update a branch name"+
+                "\n    4. Print available branches" +
                 "\n\n    *** Customer service ***\n" +
-                "\n    4. Add a customer" +
-                "\n    5. Remove a customer" +
-                "\n    6. Update a customer" +
-                "\n    7. Query a customer" +
-                "\n    8. Print customers" +
+                "\n    5. Add a customer" +
+                "\n    6. Remove a customer" +
+                "\n    7. Update a customer" +
+                "\n    8. Query a customer" +
+                "\n    9. Print customers" +
                 "\n\n    *** Funds service ***\n" +
-                "\n    9. Deposit" +
-                "\n    10. Withdraw" +
-                "\n    11. Print balance" +
+                "\n    10. Deposit" +
+                "\n    11. Withdraw" +
+                "\n    12. Print balance" +
                 "\n\n    *** Quit ***" +
-                "\n    12. Quit application");
+                "\n    13. Quit application");
     }
 
     private static void addNewBranch() {
@@ -95,6 +99,14 @@ public class Main {
         String branchName = scanner.nextLine().toLowerCase();
         bankObj.removeBranch(branchName);
     }
+    private static void updateBranch(){
+        System.out.println("Enter the branch's name:");
+        String oldBranchName = scanner.nextLine().toLowerCase();
+        System.out.println("Enter the new branch's name:");
+        String newBranchName = scanner.nextLine().toLowerCase();
+        bankObj.updateBranch(oldBranchName,newBranchName);
+    }
+
 
     private static void printBranches() {
         bankObj.printBranches();

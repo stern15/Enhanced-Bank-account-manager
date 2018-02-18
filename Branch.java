@@ -13,6 +13,10 @@ public class Branch {
 
     }
 
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
     public String getBranchName() {
         return branchName;
     }
