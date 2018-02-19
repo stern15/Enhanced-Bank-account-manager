@@ -1,5 +1,6 @@
 package bank;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -7,17 +8,39 @@ public class Main {
     private static String bankName;
     private static Bank bankObj;
     private static Customer customerObj;
+    private static int choice;
+    private static String branchName;
+    private static String customerName;
+    private static double initialFunds;
+    private static double newFunds;
+    private static double depositAmount;
+    private static double withdrawAmount;
 
     public static void main(String[] args) {
         boolean flag = true;
         System.out.println("Enter the name of the bank:");
+
         bankName = scanner.nextLine().toLowerCase();
+
         bankObj = new Bank(bankName);
         printBranchInstruction();
         while (flag) {
             System.out.println("\nEnter your choice:");
-            int choice = scanner.nextInt();
+            try {
+                choice = scanner.nextInt();
+
+            } catch (InputMismatchException e) {
+                System.out.println("Please select between 0-12");
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception ex) {
+
+                }
+
+            }
+
             scanner.nextLine();
+
             switch (choice) {
                 case 0:
                     printBranchInstruction();
@@ -49,9 +72,15 @@ public class Main {
                 case 9:
                     printCustomers();
                     break;
-                //case 10;
-                //case 11;
-                //case 12;
+                case 10:
+                    depositFunds();
+                    break;
+                case 11:
+                    withdrawFunds();
+                    break;
+                case 12:
+                    printFunds();
+                    break;
                 case 13:
                     flag = false;
                     break;
@@ -71,7 +100,7 @@ public class Main {
                 "\n\n    *** Branch service ***\n" +
                 "\n    1. Add a new branch" +
                 "\n    2. Remove a branch" +
-                "\n    3. Update a branch name"+
+                "\n    3. Update a branch name" +
                 "\n    4. Print available branches" +
                 "\n\n    *** Customer service ***\n" +
                 "\n    5. Add a customer" +
@@ -89,22 +118,32 @@ public class Main {
 
     private static void addNewBranch() {
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+
+        branchName = scanner.nextLine().toLowerCase();
+
+
         bankObj.addNewBranch(branchName);
 
     }
 
     private static void removeBranch() {
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+        branchName = scanner.nextLine().toLowerCase();
+
+
         bankObj.removeBranch(branchName);
     }
-    private static void updateBranch(){
-        System.out.println("Enter the branch's name:");
+
+    private static void updateBranch() {
+        System.out.println("Enter the old branch's name:");
         String oldBranchName = scanner.nextLine().toLowerCase();
+
+
         System.out.println("Enter the new branch's name:");
         String newBranchName = scanner.nextLine().toLowerCase();
-        bankObj.updateBranch(oldBranchName,newBranchName);
+
+
+        bankObj.updateBranch(oldBranchName, newBranchName);
     }
 
 
@@ -115,27 +154,45 @@ public class Main {
     private static void addNewCustomer() {
 
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+        branchName = scanner.nextLine().toLowerCase();
+
 
         if (bankObj.searchInBranches(branchName) != null) {
             System.out.println("Enter the customer's name:");
-            String customerName = scanner.nextLine().toLowerCase();
+
+            customerName = scanner.nextLine().toLowerCase();
+
+
             System.out.println("Enter the initial funds:");
-            double initialFunds = scanner.nextDouble();
+            try {
+                initialFunds = scanner.nextDouble();
+
+            } catch (InputMismatchException e) {
+                System.out.println("Funds should be a decimal number");
+                try {
+                    Thread.sleep(1500);
+                } catch (Exception ex) {
+
+                }
+
+            }
             bankObj.searchInBranches(branchName).addNewCustomer(customerName, initialFunds);
             return;
         }
-        System.out.println(branchName + " not in the branch list of customers!");
+        System.out.println(branchName + " not on the list of branches");
     }
 
     private static void removeCustomer() {
 
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+        branchName = scanner.nextLine().toLowerCase();
+
 
         if (bankObj.searchInBranches(branchName) != null) {
             System.out.println("Enter the customer's name:");
-            String customerName = scanner.nextLine().toLowerCase();
+            customerName = scanner.nextLine().toLowerCase();
+
+
             bankObj.searchInBranches(branchName).removeCustomer(customerName);
             return;
         }
@@ -144,28 +201,45 @@ public class Main {
 
     private static void updateCustomer() {
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+        branchName = scanner.nextLine().toLowerCase();
+
 
         if (bankObj.searchInBranches(branchName) != null) {
             System.out.println("Enter the customer's name:");
             String oldCustomerName = scanner.nextLine().toLowerCase();
+
+
             System.out.println("Enter the new customer's name:");
             String newCustomerName = scanner.nextLine().toLowerCase();
+
+
             System.out.println("Do you want to update the new customer's funds[Y/N]:");
             char toBeUpdate = Character.toLowerCase(scanner.next().charAt(0));
 
             if (toBeUpdate == 'y') {
                 System.out.println("Enter the new funds:");
-                double newFunds = scanner.nextDouble();
+
+                try {
+                    newFunds = scanner.nextDouble();
+
+                } catch (InputMismatchException e) {
+                    System.out.println("Funds should be a decimal number ");
+                    try {
+                        Thread.sleep(1500);
+                    } catch (Exception ex) {
+
+                    }
+
+                }
                 boolean isUpDated = bankObj.searchInBranches(branchName).updateCustomer(oldCustomerName, newCustomerName, newFunds);
-                if(isUpDated) {
+                if (isUpDated) {
                     System.out.println("Funds successfully updated to " + newFunds + " Ksh");
                     return;
                 }
 
             } else if (toBeUpdate == 'n') {
-                bankObj.searchInBranches(branchName).updateCustomer(oldCustomerName, newCustomerName,bankObj.searchInBranches(branchName).getFundForCustomer(oldCustomerName));
-                System.out.println(oldCustomerName+" successfully updated to "+newCustomerName);
+                bankObj.searchInBranches(branchName).updateCustomer(oldCustomerName, newCustomerName, bankObj.searchInBranches(branchName).getFundForCustomer(oldCustomerName));
+                System.out.println(oldCustomerName + " successfully updated to " + newCustomerName);
             } else {
                 System.out.println("Please enter \"Y\" or \"N\"");
             }
@@ -173,15 +247,19 @@ public class Main {
         }
         System.out.println(branchName + " branch does not exist!");
     }
-    private static void queryCustomer(){
+
+    private static void queryCustomer() {
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+        branchName = scanner.nextLine().toLowerCase();
+
 
         if (bankObj.searchInBranches(branchName) != null) {
             System.out.println("Enter the customer's name:");
-            String customerName = scanner.nextLine().toLowerCase();
+            customerName = scanner.nextLine().toLowerCase();
+
+
             Customer customer = bankObj.searchInBranches(branchName).queryCustomer(customerName);
-            System.out.println("Name : "+customer.getName()+" --> Balance : "+customer.getFunds().toString().replace("[", "").replace("]", "") +" Ksh");
+            System.out.println("Name : " + customer.getName() + " --> Balance : " + customer.getFunds().toString().replace("[", "").replace("]", "") + " Ksh");
             return;
         }
         System.out.println(branchName + " branch does not exist!");
@@ -189,11 +267,104 @@ public class Main {
 
     private static void printCustomers() {
         System.out.println("Enter the branch's name:");
-        String branchName = scanner.nextLine().toLowerCase();
+        branchName = scanner.nextLine().toLowerCase();
+
+
         if (bankObj.searchInBranches(branchName) != null) {
             bankObj.searchInBranches(branchName).printCustomer();
             return;
         }
-        System.out.println(branchName + " not in the branch list of customers!");
+        System.out.println(branchName + " not on the list of branches");
+    }
+
+    private static void depositFunds() {
+        System.out.println("Enter the branch's name:");
+        branchName = scanner.nextLine().toLowerCase();
+        if (bankObj.searchInBranches(branchName) != null) {
+            System.out.println("Enter the customer's name:");
+            customerName = scanner.nextLine().toLowerCase();
+            Customer customer = bankObj.searchInBranches(branchName).queryCustomer(customerName);
+
+            if(customer!=null){
+                System.out.println("Enter the amount to be deposit:");
+
+                try {
+                    depositAmount = scanner.nextDouble();
+
+                } catch (InputMismatchException e) {
+                    System.out.println("deposit amount should be a decimal number");
+                    try {
+                        Thread.sleep(1500);
+                    } catch (Exception ex) {
+                        return;
+                    }
+
+                }
+                scanner.nextLine();
+                if (depositAmount < 0 || Double.isNaN(depositAmount)) {
+                    System.out.println("Can only deposit a positive number");
+                } else {
+                    boolean isDeposit = bankObj.searchInBranches(branchName).depositFunds(customerName, depositAmount);
+                    if(isDeposit) {
+                        System.out.println(depositAmount + " Ksh successfully deposit into " + customerName + "'s account");
+                        return;
+                    }
+                }
+                return;
+            }
+            System.out.println(customerName+" not on the customer list");
+            return;
+        }
+        System.out.println(branchName + " not on the list of branches");
+    }
+
+    private static void withdrawFunds() {
+        System.out.println("Enter the branch's name:");
+        branchName = scanner.nextLine().toLowerCase();
+
+        if (bankObj.searchInBranches(branchName) != null) {
+            System.out.println("Enter the customer's name:");
+            customerName = scanner.nextLine().toLowerCase();
+
+            System.out.println("Enter the amount to be withdrawn:");
+            try {
+                withdrawAmount = scanner.nextDouble();
+
+            } catch (InputMismatchException e) {
+                System.out.println("withdraw amount should be a decimal number");
+                try {
+                    Thread.sleep(1500);
+                } catch (Exception ex) {
+                    return;
+                }
+            }
+            scanner.nextLine();
+
+            if (withdrawAmount > 0 && bankObj.searchInBranches(branchName).getFundForCustomer(customerName) > withdrawAmount) {
+                boolean isWithdrawn = bankObj.searchInBranches(branchName).withdrawFunds(customerName, withdrawAmount);
+                if(isWithdrawn) {
+                    System.out.println(withdrawAmount + " Ksh successfully withdraw from " + customerName + "'s account");
+                    return;
+                }
+                System.out.println(customerName+" not on the customer list");
+            } else {
+                System.out.println("Insufficient balance to make this transaction");
+            }
+            return;
+        }
+        System.out.println(branchName + " not on the list  of branches");
+    }
+
+    private static void printFunds() {
+        System.out.println("Enter the branch's name:");
+        branchName = scanner.nextLine().toLowerCase();
+        if (bankObj.searchInBranches(branchName) != null) {
+            System.out.println("Enter the customer's name:");
+            customerName = scanner.nextLine().toLowerCase();
+            double currentFunds = bankObj.searchInBranches(branchName).getFundForCustomer(customerName);
+            System.out.println("The balance of " + customerName + " is " + currentFunds + " Ksh");
+            return;
+        }
+        System.out.println(branchName + " not on the list  of branches");
     }
 }

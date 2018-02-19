@@ -24,7 +24,8 @@ public class Bank {
         }
         System.out.println(branchName + " branch already exist!");
     }
-    public void removeBranch(String branchName){
+
+    public void removeBranch(String branchName) {
         if (searchInBranches(branchName) != null) {
             branches.remove(searchInBranches(branchName));
             System.out.println(branchName + " branch successfully removed!");
@@ -32,13 +33,14 @@ public class Bank {
         }
         System.out.println(branchName + " branch does not exist!");
     }
-    public void updateBranch(String oldBranchName,String newBranchName){
+
+    public void updateBranch(String oldBranchName, String newBranchName) {
         if (searchInBranches(oldBranchName) != null) {
             int position = searchBranchPosition(oldBranchName);
-            
+
             branches.get(position).setBranchName(newBranchName);
 
-            System.out.println(oldBranchName + " successfully updated to "+newBranchName);
+            System.out.println(oldBranchName + " successfully updated to " + newBranchName);
             return;
         }
         System.out.println(oldBranchName + " branch does not exist!");
@@ -60,9 +62,10 @@ public class Bank {
         }
         return null;
     }
-    private int searchBranchPosition(String branchName){
-        for(int i=0;i<branches.size();i++){
-            if(branches.get(i).getBranchName().equals(branchName)){
+
+    private int searchBranchPosition(String branchName) {
+        for (int i = 0; i < branches.size(); i++) {
+            if (branches.get(i).getBranchName().equals(branchName)) {
                 return i;
             }
         }

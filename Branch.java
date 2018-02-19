@@ -43,7 +43,7 @@ public class Branch {
             System.out.println(name + " successfully deleted!");
             return;
         }
-        System.out.println(name + " not in the branch list of customers!");
+        System.out.println(name + " not on the customer list");
     }
 
 
@@ -54,26 +54,17 @@ public class Branch {
             customers.set(position, new Customer(newName, funds));
             return true;
         }
-        System.out.println(oldName + " not in the branch list of customers!");
+        System.out.println(oldName + " not on the customer list");
         return false;
     }
 
-    public double getFundForCustomer(String name) {
 
-        for (int i = 0; i < customers.size(); i++) {
-            if (customers.get(i).getName().equals(name)) {
-                fundForCustomer = customers.get(i).getFunds().get(customers.get(i).getFunds().size() - 1).doubleValue();
-
-            }
-        }
-        return fundForCustomer;
-    }
-    public Customer queryCustomer(String name){
+    public Customer queryCustomer(String name) {
         int position = searchCustomer(name);
         if (searchCustomer(name) >= 0) {
             return searchCustomer(position);
         }
-        System.out.println(name + " not in the branch list of customers!");
+        System.out.println(name + " not on the customer list");
         return null;
     }
 
@@ -81,7 +72,7 @@ public class Branch {
         System.out.println("you have " + customers.size() + " customer(s) in " + branchName + " branch\n");
         for (int i = 0; i < customers.size(); i++) {
             System.out.print((i + 1) + ". Name: " + customers.get(i).getName()
-                    + " --> Balance: " + customers.get(i).getFunds().toString().replace("[", "").replace("]", "")                                                         /*+ Arrays.toString((Double[]) customers.get(i).getFunds().toArray()).replace("[", "").replace("]", "")*/
+                    + " --> Balance: " + customers.get(i).getFunds().get(customers.get(i).getFunds().size() - 1).toString().replace("[", "").replace("]", "")
                     + " Ksh");
             System.out.println();
 
@@ -103,26 +94,34 @@ public class Branch {
         return -1;
     }
 
-    //    public double currentFunds(int position) {
-    //        return customers.get(position).getFunds().get(position);
-    //    }
 
-    //    public double depositFunds(String name, double amount) {
-    //        int position = searchCustomer(name);
-    //        if (position >= 0) {
-    //            double currentFunds = currentFunds(position);
-    //            return currentFunds += amount;
-    //        }
-    //        return -1;
-    //
-    //    }
-    //
-    //    public double withdrawFunds(String name,double amount) {
-    //        int position = searchCustomer(name);
-    //        if (position >= 0) {
-    //            double currentFunds = currentFunds(position);
-    //            return currentFunds -= amount;
-    //        }
-    //        return -1;
-    //    }
+    public boolean depositFunds(String name, double amount) {
+        int position = searchCustomer(name);
+        if (position >= 0) {
+            customers.get(position).depositFunds(amount, position);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean withdrawFunds(String name, double amount) {
+        int position = searchCustomer(name);
+        if (position >= 0) {
+            customers.get(position).withdrawFunds(amount, position);
+            return true;
+        }
+        return false;
+    }
+
+    public double getFundForCustomer(String name) {
+
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).getName().equals(name)) {
+                fundForCustomer = customers.get(i).getFunds().get(customers.get(i).getFunds().size() - 1).doubleValue();
+
+            }
+        }
+        return fundForCustomer;
+    }
+
 }
