@@ -26,36 +26,31 @@ public class Branch {
     }
 
 
-    public void addNewCustomer(String name, double initialFunds) {
+    public boolean addNewCustomer(String name, double initialFunds) {
+
         if (searchCustomer(name) < 0) {
-            customers.add(new Customer(name, initialFunds));
-            System.out.println(name + " successfully added!");
-            return;
+                customers.add(new Customer(name, initialFunds));
+            return true;
         }
-        System.out.println("Customer's name already exist");
+        System.out.println("the customer's name already exist");
+        return false;
     }
 
     public void removeCustomer(String name) {
         int position = searchCustomer(name);
-        if (position >= 0) {
             Customer currentCustomer = searchCustomer(position);
             customers.remove(currentCustomer);
             System.out.println(name + " successfully deleted!");
-            return;
-        }
+
         System.out.println(name + " not on the customer list");
     }
 
 
-    public boolean updateCustomer(String oldName, String newName, double funds) {
+    public void updateCustomer(String oldName, String newName, double funds) {
         int position = searchCustomer(oldName);
-        if (position >= 0) {
 
             customers.set(position, new Customer(newName, funds));
-            return true;
-        }
-        System.out.println(oldName + " not on the customer list");
-        return false;
+
     }
 
 
@@ -64,7 +59,6 @@ public class Branch {
         if (searchCustomer(name) >= 0) {
             return searchCustomer(position);
         }
-        System.out.println(name + " not on the customer list");
         return null;
     }
 
@@ -95,7 +89,7 @@ public class Branch {
     }
 
 
-    public boolean depositFunds(String name, double amount) {
+    public boolean /*void*/ depositFunds(String name, double amount) {
         int position = searchCustomer(name);
         if (position >= 0) {
             customers.get(position).depositFunds(amount, position);
@@ -104,13 +98,13 @@ public class Branch {
         return false;
     }
 
-    public boolean withdrawFunds(String name, double amount) {
+    public /*boolean*/void withdrawFunds(String name, double amount) {
         int position = searchCustomer(name);
-        if (position >= 0) {
+      //  if (position >= 0) {
             customers.get(position).withdrawFunds(amount, position);
-            return true;
-        }
-        return false;
+//            return true;
+//        }
+//        return false;
     }
 
     public double getFundForCustomer(String name) {
